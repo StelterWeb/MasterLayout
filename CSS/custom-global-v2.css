@@ -1,0 +1,73 @@
+/* HOMEPAGE */
+
+/* journey section popups */
+	/* magnific popup */
+	#journey-paths-details .middle-results, .stl-journey-paths .middle-results {display:none;} /* hide as page loads */
+	.mfp-content .white-popup-block h4 {margin:0 0 5px 0;padding:0;}
+	.mfp-content .white-popup-block .stl_JourneySubtext {border-bottom:2px solid #E5E5E5;padding-bottom:10px;}
+	.mfp-content .white-popup-block a {font-size:14px;}
+	.modal-backdrop.in {display: none;} /* Hide bootstrap modal backdrop */
+
+
+/* INTERIOR PAGES */
+
+/* Videos */
+	#stl-video-container {display:none;}
+	body[id*=".xml"] #stl-video-container {display:block;} /* Show this feature on all pages in Preview */
+	#bequests-and-wills-page #stl-video-container, 
+	#wills-and-living-trusts-page #stl-video-container, 
+	#beneficiary-designations-page #stl-video-container, 
+	#charitable-gift-annuities-page #stl-video-container, 
+	#life-insurance-page #stl-video-container, 
+	#retirement-plan-assets-page #stl-video-container {display:block;}
+		#bequests-and-wills-page .see-how-it-works, 
+		#wills-and-living-trusts-page .see-how-it-works, 
+		#beneficiary-designations-page .see-how-it-works, 
+		#charitable-gift-annuities-page .see-how-it-works, 
+		#life-insurance-page .see-how-it-works, 
+		#retirement-plan-assets-page .see-how-it-works {display:block;float:none;width:100%;}
+
+/* Learn How to Fund It section */
+	#life-insurance-page .learn-how-to-fund, #retirement-plan-assets-page .learn-how-to-fund {display:none;}
+
+/* eBrochure Pullouts - hide ebrochure pullouts on pages that don't have ebrochures */
+	#memorials-and-tribute-gifts-page .ebro,
+	#cash-page .ebro,
+	#commercial-annuities-page .ebro,
+	#tangible-personal-property-page .ebro,
+	#securities-page .ebro, #appreciated-securities-page .ebro,
+	#for-professional-advisors-page .ebro,
+	#personal-estate-planning-kit-page .ebro,
+	#bank-or-brokerage-accounts-page .ebro,
+	#closely-held-stock-page .ebro {display:none;}
+	
+/* Stretch the next steps section to 100% width on pages without eBrochures */
+	#memorials-and-tribute-gifts-page .next-steps .stl-left,
+	#bank-or-brokerage-accounts-page .next-steps .stl-left,
+	#cash-page .next-steps .stl-left,
+	#commercial-annuities-page .next-steps .stl-left,
+	#tangible-personal-property-page .next-steps .stl-left,
+	#securities-page .next-steps .stl-left, #appreciated-securities-page .next-steps .stl-left{width:100%;}
+
+	
+	/* hide next steps on pages that don't have it */
+	#for-professional-advisors-page .next-steps,
+	#closely-held-stock .next-steps,
+	#personal-estate-planning-kit-page .next-steps {display:none;}
+	
+	/* pepc pullout (next steps) - hide by default & only show on certain pages */
+	.stl-pepc-promo {display:none;}
+	body[id*=".xml"] .stl-pepc-promo {display:block;} /* Show this feature on all pages in Preview */
+	#bequests-and-wills-page .stl-pepc-promo,
+	#wills-and-living-trusts-page .stl-pepc-promo,
+	#beneficiary-designations-page .stl-pepc-promo,
+	#endowed-gifts-page .stl-pepc-promo {display:block;}
+	
+/* Hide Case Study */
+	#for-professional-advisors-page .case-study {display:none;}
+
+/* Hide empty Gift Illustrator features */
+	#stl-gift-illustrator-container:empty {display:none;}
+	
+/* bootstrap hidden class */
+.hidden {display: none !important;visibility: hidden !important;}
