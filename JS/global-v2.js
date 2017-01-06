@@ -9,13 +9,6 @@
 !function(a,b,c){"use strict";function d(a,b){this._defaults=e,this.element=a,this.setOptions(b),this.init()}var e={tagName:"a",newLine:"\n",target:"_blank",linkClass:null,linkClasses:[],linkAttributes:null};d.prototype={constructor:d,init:function(){1===this.element.nodeType?d.linkifyNode.call(this,this.element):this.element=d.linkify.call(this,this.element.toString())},setOptions:function(a){this.settings=d.extendSettings(a,this.settings)},toString:function(){return this.element.toString()}},d.extendSettings=function(a,b){var c;b=b||{};for(c in e)b[c]||(b[c]=e[c]);for(c in a)b[c]=a[c];return b},d.linkMatch=new RegExp(["(",'\\s|[^a-zA-Z0-9.\\+_\\/"\\>\\-]|^',")(?:","(","[a-zA-Z0-9\\+_\\-]+","(?:","\\.[a-zA-Z0-9\\+_\\-]+",")*@",")?(","http:\\/\\/|https:\\/\\/|ftp:\\/\\/",")?(","(?:(?:[a-z0-9][a-z0-9_%\\-_+]*\\.)+)",")(","(?:com|ca|co|edu|gov|net|org|dev|biz|cat|int|pro|tel|mil|aero|asia|coop|info|jobs|mobi|museum|name|post|travel|local|[a-z]{2})",")(","(?::\\d{1,5})",")?(","(?:","[\\/|\\?]","(?:","[\\-a-zA-Z0-9_%#*&+=~!?,;:.\\/]*",")*",")","[\\-\\/a-zA-Z0-9_%#*&+=~]","|","\\/?",")?",")(",'[^a-zA-Z0-9\\+_\\/"\\<\\-]|$',")"].join(""),"g"),d.emailLinkMatch=/(<[a-z]+ href=\")(http:\/\/)([a-zA-Z0-9\+_\-]+(?:\.[a-zA-Z0-9\+_\-]+)*@)/g,d.linkify=function(a,b){var c,e,f,g=[];this.constructor===d&&this.settings?(e=this.settings,b&&(e=d.extendSettings(b,e))):e=d.extendSettings(b),f=e.linkClass?e.linkClass.split(/\s+/):[],f.push.apply(f,e.linkClasses),a=a.replace(/</g,"&lt;").replace(/(\s)/g,"$1$1"),g.push("$1<"+e.tagName,'href="http://$2$4$5$6$7"'),g.push('class="linkified'+(f.length>0?" "+f.join(" "):"")+'"'),e.target&&g.push('target="'+e.target+'"');for(c in e.linkAttributes)g.push([c,'="',e.linkAttributes[c].replace(/\"/g,"&quot;").replace(/\$/g,"&#36;"),'"'].join(""));return g.push(">$2$3$4$5$6$7</"+e.tagName+">$8"),a=a.replace(d.linkMatch,g.join(" ")),a=a.replace(d.emailLinkMatch,"$1mailto:$3"),a=a.replace(/(\s){2}/g,"$1"),a=a.replace(/\n/g,e.newLine)},d.linkifyNode=function(a){var b,e,f,g,h;if(a&&"object"==typeof a&&1===a.nodeType&&"a"!==a.tagName.toLowerCase()&&!/[^\s]linkified[\s$]/.test(a.className)){for(b=[],g=d._dummyElement||c.createElement("div"),e=a.firstChild,f=a.childElementCount;e;){if(3===e.nodeType){for(;g.firstChild;)g.removeChild(g.firstChild);for(g.innerHTML=d.linkify.call(this,e.textContent||e.innerText||e.nodeValue),b.push.apply(b,g.childNodes);g.firstChild;)g.removeChild(g.firstChild)}else 1===e.nodeType?b.push(d.linkifyNode(e)):b.push(e);e=e.nextSibling}for(;a.firstChild;)a.removeChild(a.firstChild);for(h=0;h<b.length;h++)a.appendChild(b[h])}return a},d._dummyElement=c.createElement("div"),a.fn.linkify=function(b){return this.each(function(){var c;(c=a.data(this,"plugin-linkify"))?(c.setOptions(b),c.init()):a.data(this,"plugin-linkify",new d(this,b))})},a.fn.linkify.Constructor=d,a(b).on("load",function(){a("[data-linkify]").each(function(){var b,c=a(this),d=c.attr("data-linkify"),e={tagName:c.attr("data-linkify-tagname"),newLine:c.attr("data-linkify-newline"),target:c.attr("data-linkify-target"),linkClass:c.attr("data-linkify-linkclass")};for(var f in e)"undefined"==typeof e[f]&&delete e[f];b="this"===d?c:c.find(d),b.linkify(e)})}),a("body").on("click",".linkified",function(){var c=a(this),d=c.attr("href"),e=/^mailto:/i.test(d),f=c.attr("target");return e?b.location.href=d:b.open(d,f),!1})}(jQuery,window,document);
 
 
-jQuery.support.css3transition = (function () {
-	var thisBody = document.body || document.documentElement,
-		thisStyle = thisBody.style,
-		support = thisStyle.transition !== undefined || thisStyle.WebkitTransition !== undefined || thisStyle.MozTransition !== undefined || thisStyle.MsTransition !== undefined || thisStyle.OTransition !== undefined;
-	return support;
-})();
-
 function isTouchDevice() {
 	return (('ontouchstart' in window)
       || (navigator.MaxTouchPoints > 0)
@@ -132,84 +125,6 @@ var isiOS = deviceAgent.match(/(iphone|ipod|ipad)/);
 
 jQuery(document).ready(function () {
 
-	//brochure validation
-	/*jQuery("#brochureform").submit(function(e){
-		var fName = jQuery.trim(document.forms["brochureform"]["first"].value);
-		var lName = jQuery.trim(document.forms["brochureform"]["last"].value);
-		var email = jQuery.trim(document.forms["brochureform"]["email"].value);
-		var honeypot = jQuery.trim(document.forms["brochureform"]["honeypot"].value);
-
-		if("" != honeypot){
-			//spam bot filled in hidden field, bypass form submission
-			jQuery.magnificPopup.close();
-			return false;
-		}else if(fName != "" && lName != "" && email != ""){
-			if(!isEmail(email)){
-				alert("Please enter a valid email address");
-				return false;
-			}else{
-				jQuery.magnificPopup.close();
-				return true;
-			}
-		} else {
-			alert("Please fill your first name, last name and email address");
-			return false;
-		}
-	});*/
-
-	//DCGA brochure validation
-	/*jQuery("#DCGAbrochureform").submit(function(e){
-		var fName = jQuery.trim(document.forms["DCGAbrochureform"]["first"].value);
-		var lName = jQuery.trim(document.forms["DCGAbrochureform"]["last"].value);
-		var email = jQuery.trim(document.forms["DCGAbrochureform"]["email"].value);
-		var checkpoint = function(){
-			if(document.forms["DCGAbrochureform"]["honeypot"]) return jQuery.trim(document.forms["DCGAbrochureform"]["honeypot"].value);
-			if(document.forms["DCGAbrochureform"]["dcgaCheckpoint"]) return jQuery.trim(document.forms["DCGAbrochureform"]["dcgaCheckpoint"].value);
-		}
-
-		if("" != checkpoint()){
-			//spam bot filled in hidden field, bypass form submission
-			jQuery.magnificPopup.close();
-			return false;
-		}else if(fName != "" && lName != "" && email != ""){
-			if(!isEmail(email)){
-				alert("Please enter a valid email address");
-				return false;
-			}else{
-				jQuery.magnificPopup.close();
-				return true;
-			}
-		} else {
-			alert("Please fill your first name, last name and email address");
-			return false;
-		}
-	});*/
-
-	//PEPK form validation
-	/*jQuery("#PEPCForm").submit(function(e){
-		var fName = jQuery.trim(document.forms["PEPCForm"]["first"].value);
-		var lName = jQuery.trim(document.forms["PEPCForm"]["last"].value);
-		var email = jQuery.trim(document.forms["PEPCForm"]["email"].value);
-		var honeypot = jQuery.trim(document.forms["PEPCForm"]["honeypot"].value);
-
-		if("" != honeypot){
-			//spam bot filled in hidden field, bypass form submission
-			jQuery.magnificPopup.close();
-			return false;
-
-		}else if(fName != "" && lName != "" && email != ""){
-			if(!isEmail(email)){
-				alert("Please enter a valid email address");
-				return false;
-			}else{
-				jQuery.magnificPopup.close();
-				return true;
-			}
-		} else {
-			alert("Please fill your first name, last name and email address");
-			return false;
-		}
-	});*/
 
 	/* Contact Us page form validation */
 	jQuery("#stl-contact-form").submit(function(e){
@@ -263,17 +178,6 @@ jQuery(document).ready(function () {
 		midClick: true // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
 	});
 
-	/*if(!jQuery.support.css3transition){
-		jQuery(".journey-paths .advGroup img").on("mouseenter",function(){
-			jQuery(this).hide();
-			jQuery(this).next().show();
-		});
-
-		jQuery(".journey-paths .advGroup .txtPopup").on("mouseleave",function(){
-			jQuery(this).hide();
-			jQuery(this).prev().show();
-		});
-	}*/
 	jQuery(".stl-journey-paths a.stl-popup").attr("oncontextmenu", "return false;");
 
 	var alphabet = ("abcdefghijklmnopqrstuvwxyz").split("");
@@ -455,12 +359,10 @@ var executeFlippedSectionSpecific = function () {
 };
 
 //Currently using flipped due to values being reverted back to their original value before 08/2016 change
-//See aroulnd line 324
 if(jQuery('#stl_case-study').length > 0){
     executeFlippedGlobal();
     executeFlippedSectionSpecific();
     _setCaseStudyText(caseStudyText);
-    // $('#stl_case-study p:nth-child(3)').insertBefore($('#stl_case-study .toolH3'));
 }
 
 	var topDiff = 13;
@@ -585,7 +487,7 @@ if(jQuery('#stl_case-study').length > 0){
 		jQuery("#fancybox-right-ico").html("<span class='offscreen'>Right</span>");
 	}, 100);
 
-	// Fix IGX glitch. IGX for some reason places "</textarea>" insed of
+	// Fix IGX glitch. IGX for some reason places "</textarea>" instead of
 	// your textarea field whenever you check in the page. We can remove
 	// this line of code once IGX comes up with a fix.
 	jQuery("textarea").val("");
