@@ -348,9 +348,8 @@ var caseStudyComponent = {
 
 }
 
-var _getCaseStudyText = function () {
-    return jQuery('#stl_case-study').html();
-};
+var _getCaseStudyText =  jQuery('#stl_case-study').html();
+
 var _setCaseStudyText = function (value) {
     jQuery('#stl_case-study').html(value);
 };
@@ -706,7 +705,7 @@ jQuery(document).ready(function(){
 
 
 });
-jQuery(window).load(function() {
+jQuery(document).load(function() {
     // Fix an HTML issue found on the retirement-plan-check-up-tips syndicated article
     if (jQuery('body.retirement-plan-check-up-tips .syndicated ol li:last-child').length || jQuery('body#retirement-plan-check-up-tips-page .syndicated ol li:last-child').length) {
         var $lastTip = jQuery('.syndicated ol li:last-child');
