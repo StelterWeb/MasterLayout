@@ -470,7 +470,7 @@ if(jQuery('#stl_case-study').length > 0){
 		});
 	}
 
-	jQuery(".contactEMAddr").click(function (e) {
+	jQuery(".contactEMAddr").on("click",function (e) {
 	    e.preventDefault();
 	    var uname = $(this).data('uname'),
             domain = $(this).data('domain');
