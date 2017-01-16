@@ -632,7 +632,7 @@ jQuery(window).load(function() {
         jQuery('#stl_case-study').html(value);
     };
 
-    var caseStudyText = _getCaseStudyText();
+    var caseStudyText = _getCaseStudyText;
 
     var executeGlobal = function () {
 
