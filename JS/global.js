@@ -289,146 +289,6 @@ jQuery(document).ready(function () {
 		});
 	}
 
-    //Order of values in each 'local' section is hugely important. Changing the order will
-// change the context of the case study text. You have been warned. :)
-
-var caseStudyComponent = {
-    global: {
-        '2.4 percent': '1.6 percent',
-    },
-    charitableLeadTrusts: {
-        selector: function () {
-            return jQuery('body.charitable-lead-trusts').length || jQuery('body#charitable-lead-trusts-page').length ? true : false;
-        },
-        local: {
-            '$56,000': '$175,000',
-            '$840,000': '$2,625,000',
-            '$698,488': '$2,317,400',
-            '$2,182,775': '$2,317,400',
-            '$101,512': '$182,600',
-            '$317,225': '$182,600',
-        },
-        matchMultiple: {
-            '$800,000': '$2,500,000'
-        }
-    },
-    charitableGiftAnnuities: {
-        selector: function () {
-            return jQuery('body.charitable-gift-annuities').length || jQuery('body#charitable-gift-annuities-page').length ? true : false;
-        },
-        local: {
-            '$5,544': '$4,166'
-        }
-    },
-    trusts: {
-        selector: function () {
-            return jQuery('body.trusts').length || jQuery('body#trusts-page').length ? true : false;
-        },
-        local: {
-            '$56,000': '$175,000',
-            '$840,000': '$2,625,000',
-            '$698,488': '$2,317,400',
-            '$2,182,775': '$2,317,400',
-            '$101,512': '$182,600',
-            '$317,225': '$182,600',
-        },
-        matchMultiple: {
-            '$800,000': '$2,500,000'
-        }
-    },
-    charitableRemainderTrusts: {
-        selector: function () {
-            return jQuery('body.charitable-remainder-trusts').length || jQuery('body#charitable-remainder-trusts-page').length || jQuery('body.remainder-trusts').length || jQuery('body#remainder-trusts-page').length ? true : false;
-        },
-        local: {
-            '$81,305': '$97,613',
-            '$22,765': '$27,332'
-        }
-    }
-
-}
-
-var _getCaseStudyText =  jQuery('#stl_case-study').html();
-
-var _setCaseStudyText = function (value) {
-    jQuery('#stl_case-study').html(value);
-};
-
-var caseStudyText = _getCaseStudyText();
-
-var executeGlobal = function () {
-
-    for (var key in caseStudyComponent.global) {
-        caseStudyText = caseStudyText.replace(key, caseStudyComponent.global[key]);
-    }
-
-};
-
-var executeFlippedGlobal = function () {
-
-    for (var key in caseStudyComponent.global) {
-        caseStudyText = caseStudyText.replace(caseStudyComponent.global[key], key);
-    }
-
-};
-
-var filtered = Object.keys(caseStudyComponent).filter(function (key) {
-    return key != 'global';
-});
-
-var executeSectionSpecific = function () {
-    filtered.forEach(function (property, index) {
-
-        if (caseStudyComponent[property].selector()) {
-            var outerLoopLocal = caseStudyComponent[property].local;
-
-            for (var key in caseStudyComponent[property].local) {
-                caseStudyText = caseStudyText.replace(key, outerLoopLocal[key]);
-            }
-
-            if (caseStudyComponent[property].matchMultiple) {
-                var outerLoopMultiple = caseStudyComponent[property].matchMultiple;
-                for (var key in caseStudyComponent[property].matchMultiple) {
-                    caseStudyText = caseStudyText.replace(new RegExp('\\' + key, 'g'), outerLoopMultiple[key]);
-                }
-            }
-
-        }
-
-    });
-};
-
-//Reverse the arguments so that the value that the key references is what were searching for in //the text and the key's literal string value is what were replacing the match with
-var executeFlippedSectionSpecific = function () {
-    filtered.forEach(function (property, index) {
-
-        if (caseStudyComponent[property].selector()) {
-            var outerLoopLocal = caseStudyComponent[property].local;
-
-            for (var key in caseStudyComponent[property].local) {
-                caseStudyText = caseStudyText.replace(outerLoopLocal[key], key);
-            }
-
-            if (caseStudyComponent[property].matchMultiple) {
-                var outerLoopMultiple = caseStudyComponent[property].matchMultiple;
-                for (var key in caseStudyComponent[property].matchMultiple) {
-                    caseStudyText = caseStudyText.replace(new RegExp('\\' + outerLoopMultiple[key], 'g'), key);
-                }
-            }
-
-        }
-
-    });
-};
-
-//Currently using flipped due to values being reverted back to their original value before 08/2016 change
-//See aroulnd line 324
-if(jQuery('#stl_case-study').length > 0){
-    executeFlippedGlobal();
-    executeFlippedSectionSpecific();
-    _setCaseStudyText(caseStudyText);
-    // $('#stl_case-study p:nth-child(3)').insertBefore($('#stl_case-study .toolH3'));
-}
 
 
 	var topDiff = 13;
@@ -705,7 +565,148 @@ jQuery(document).ready(function(){
 
 
 });
-jQuery(document).load(function() {
+jQuery(window).load(function() {
+
+    //Order of values in each 'local' section is hugely important. Changing the order will
+    // change the context of the case study text. You have been warned. :)
+
+    var caseStudyComponent = {
+        global: {
+            '2.4 percent': '1.6 percent',
+        },
+        charitableLeadTrusts: {
+            selector: function () {
+                return jQuery('body.charitable-lead-trusts').length || jQuery('body#charitable-lead-trusts-page').length ? true : false;
+            },
+            local: {
+                '$56,000': '$175,000',
+                '$840,000': '$2,625,000',
+                '$698,488': '$2,317,400',
+                '$2,182,775': '$2,317,400',
+                '$101,512': '$182,600',
+                '$317,225': '$182,600',
+            },
+            matchMultiple: {
+                '$800,000': '$2,500,000'
+            }
+        },
+        charitableGiftAnnuities: {
+            selector: function () {
+                return jQuery('body.charitable-gift-annuities').length || jQuery('body#charitable-gift-annuities-page').length ? true : false;
+            },
+            local: {
+                '$5,544': '$4,166'
+            }
+        },
+        trusts: {
+            selector: function () {
+                return jQuery('body.trusts').length || jQuery('body#trusts-page').length ? true : false;
+            },
+            local: {
+                '$56,000': '$175,000',
+                '$840,000': '$2,625,000',
+                '$698,488': '$2,317,400',
+                '$2,182,775': '$2,317,400',
+                '$101,512': '$182,600',
+                '$317,225': '$182,600',
+            },
+            matchMultiple: {
+                '$800,000': '$2,500,000'
+            }
+        },
+        charitableRemainderTrusts: {
+            selector: function () {
+                return jQuery('body.charitable-remainder-trusts').length || jQuery('body#charitable-remainder-trusts-page').length || jQuery('body.remainder-trusts').length || jQuery('body#remainder-trusts-page').length ? true : false;
+            },
+            local: {
+                '$81,305': '$97,613',
+                '$22,765': '$27,332'
+            }
+        }
+
+    }
+
+    var _getCaseStudyText = jQuery('#stl_case-study').html();
+
+    var _setCaseStudyText = function (value) {
+        jQuery('#stl_case-study').html(value);
+    };
+
+    var caseStudyText = _getCaseStudyText();
+
+    var executeGlobal = function () {
+
+        for (var key in caseStudyComponent.global) {
+            caseStudyText = caseStudyText.replace(key, caseStudyComponent.global[key]);
+        }
+
+    };
+
+    var executeFlippedGlobal = function () {
+
+        for (var key in caseStudyComponent.global) {
+            caseStudyText = caseStudyText.replace(caseStudyComponent.global[key], key);
+        }
+
+    };
+
+    var filtered = Object.keys(caseStudyComponent).filter(function (key) {
+        return key != 'global';
+    });
+
+    var executeSectionSpecific = function () {
+        filtered.forEach(function (property, index) {
+
+            if (caseStudyComponent[property].selector()) {
+                var outerLoopLocal = caseStudyComponent[property].local;
+
+                for (var key in caseStudyComponent[property].local) {
+                    caseStudyText = caseStudyText.replace(key, outerLoopLocal[key]);
+                }
+
+                if (caseStudyComponent[property].matchMultiple) {
+                    var outerLoopMultiple = caseStudyComponent[property].matchMultiple;
+                    for (var key in caseStudyComponent[property].matchMultiple) {
+                        caseStudyText = caseStudyText.replace(new RegExp('\\' + key, 'g'), outerLoopMultiple[key]);
+                    }
+                }
+
+            }
+
+        });
+    };
+
+    //Reverse the arguments so that the value that the key references is what were searching for in //the text and the key's literal string value is what were replacing the match with
+    var executeFlippedSectionSpecific = function () {
+        filtered.forEach(function (property, index) {
+
+            if (caseStudyComponent[property].selector()) {
+                var outerLoopLocal = caseStudyComponent[property].local;
+
+                for (var key in caseStudyComponent[property].local) {
+                    caseStudyText = caseStudyText.replace(outerLoopLocal[key], key);
+                }
+
+                if (caseStudyComponent[property].matchMultiple) {
+                    var outerLoopMultiple = caseStudyComponent[property].matchMultiple;
+                    for (var key in caseStudyComponent[property].matchMultiple) {
+                        caseStudyText = caseStudyText.replace(new RegExp('\\' + outerLoopMultiple[key], 'g'), key);
+                    }
+                }
+
+            }
+
+        });
+    };
+
+    //Currently using flipped due to values being reverted back to their original value before 08/2016 change
+    //See aroulnd line 324
+    if (jQuery('#stl_case-study').length > 0) {
+        executeFlippedGlobal();
+        executeFlippedSectionSpecific();
+        _setCaseStudyText(caseStudyText);
+    }
+
     // Fix an HTML issue found on the retirement-plan-check-up-tips syndicated article
     if (jQuery('body.retirement-plan-check-up-tips .syndicated ol li:last-child').length || jQuery('body#retirement-plan-check-up-tips-page .syndicated ol li:last-child').length) {
         var $lastTip = jQuery('.syndicated ol li:last-child');
