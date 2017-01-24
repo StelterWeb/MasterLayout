@@ -6,6 +6,8 @@
  *  Made by SoapBox Innovations, Inc.
  *  Under MIT License
  */
+
+var globalFunctions = {};
 ! function (a, b, c) {
     "use strict";
 
@@ -304,111 +306,110 @@ jQuery(document).ready(function () {
             }
         });
     }
+    var flyoverSetup = function() {
+        var topDiff = 13;
+        if (!isTouchDevice()) {
+            var numFlyovers = 0;
+            jQuery(".flyover-link").each(function () {
+                numFlyovers++;
 
-    var topDiff = 13;
-    if (!isTouchDevice()) {
-        var numFlyovers = 0;
-        jQuery(".flyover-link").each(function () {
-            numFlyovers++;
-
-            if (jQuery(this).attr("rel")) {
-                var flyover = jQuery(this).attr("rel").toLowerCase();
-                if (!jQuery(this).next().is(flyover)) {
-                    // Wrap the flyover link in a span tag so that we can
-                    // position the pop-up relative to it on our desktop version
-                    jQuery(this).wrap("<span class='flyover-link-wrap not-touch-device'></span>");
-                    if (numFlyovers >= 2) {
-                        var flyoverCopy = jQuery(flyover).clone();
-                        jQuery(this).parent().append(jQuery(flyoverCopy));
-                    } else {
-                        jQuery(this).parent().append(jQuery(flyover));
-                    }
-                    //jQuery(flyover).css("top", jQuery(this).position().top + topDiff);
-                }
-            }
-        });
-        jQuery(".flyover-link").click(function (event) {
-            event.preventDefault();
-        });
-    } else {
-        // Reposition the popup top placement when a device's
-        // orientation changes
-        jQuery(window).on("orientationchange", function () {
-            jQuery(".flyover-link").each(
-                function () {
+                if (jQuery(this).attr("rel")) {
                     var flyover = jQuery(this).attr("rel").toLowerCase();
-                    jQuery(flyover).css("top", jQuery(this).position().top + topDiff);
-                }
-            );
-        });
-        jQuery(".flyover-link").click(
-            function () {
-                var iteration = jQuery(this).data('iteration') || 1
-                switch (iteration) {
-                    case 1:
-                        var flyover = jQuery(this).attr("rel").toLowerCase();
-                        if (!jQuery(this).next().is(flyover)) {
-                            // Wrap the flyover link in a span tag so that we can
-                            // position the pop-up relative to it on our desktop version
-                            jQuery(this).wrap("<span class='flyover-link-wrap'></span>");
+                    if (!jQuery(this).next().is(flyover)) {
+                        // Wrap the flyover link in a span tag so that we can
+                        // position the pop-up relative to it on our desktop version
+                        jQuery(this).wrap("<span class='flyover-link-wrap not-touch-device'></span>");
+                        if (numFlyovers >= 2) {
+                            var flyoverCopy = jQuery(flyover).clone();
+                            jQuery(this).parent().append(jQuery(flyoverCopy));
+                        } else {
                             jQuery(this).parent().append(jQuery(flyover));
-                            jQuery(flyover).css("top", jQuery(this).position().top + topDiff);
                         }
-                        jQuery(flyover).show();
-                        break;
-
-                    case 2:
-                        var flyover = jQuery(this).attr("rel").toLowerCase();
-                        jQuery(flyover).hide();
-                        break;
+                        //jQuery(flyover).css("top", jQuery(this).position().top + topDiff);
+                    }
                 }
-                iteration++;
-                if (iteration > 2) iteration = 1
-                jQuery(this).data('iteration', iteration)
+            });
+            jQuery(".flyover-link").click(function (event) {
+                event.preventDefault();
+            });
+        } else {
+            // Reposition the popup top placement when a device's
+            // orientation changes
+            jQuery(window).on("orientationchange", function () {
+                jQuery(".flyover-link").each(
+                    function () {
+                        var flyover = jQuery(this).attr("rel").toLowerCase();
+                        jQuery(flyover).css("top", jQuery(this).position().top + topDiff);
+                    }
+                );
+            });
+            jQuery(".flyover-link").click(
+                function () {
+                    var iteration = jQuery(this).data('iteration') || 1
+                    switch (iteration) {
+                        case 1:
+                            var flyover = jQuery(this).attr("rel").toLowerCase();
+                            if (!jQuery(this).next().is(flyover)) {
+                                // Wrap the flyover link in a span tag so that we can
+                                // position the pop-up relative to it on our desktop version
+                                jQuery(this).wrap("<span class='flyover-link-wrap'></span>");
+                                jQuery(this).parent().append(jQuery(flyover));
+                                jQuery(flyover).css("top", jQuery(this).position().top + topDiff);
+                            }
+                            jQuery(flyover).show();
+                            break;
+
+                        case 2:
+                            var flyover = jQuery(this).attr("rel").toLowerCase();
+                            jQuery(flyover).hide();
+                            break;
+                    }
+                    iteration++;
+                    if (iteration > 2) iteration = 1
+                    jQuery(this).data('iteration', iteration)
+                });
+
+            // When the screen is touched let's check to see if we've clicked on
+            // a flyover link and open it. If not, then we'll cycle through all
+            // flyovers and close them. - JK
+            // -----------------------------------------------------------------------------
+            var dragging = false;
+            jQuery(document).on("touchmove", function () {
+                // If we're dragging then set the variable to true so that
+                // when we lift our finger the page knows that we don't
+                // want to clear the flyovers, but move the page.
+                dragging = true;
             });
 
-        // When the screen is touched let's check to see if we've clicked on
-        // a flyover link and open it. If not, then we'll cycle through all
-        // flyovers and close them. - JK
-        // -----------------------------------------------------------------------------
-        var dragging = false;
-        jQuery(document).on("touchmove", function () {
-            // If we're dragging then set the variable to true so that
-            // when we lift our finger the page knows that we don't
-            // want to clear the flyovers, but move the page.
-            dragging = true;
-        });
-
-        jQuery(document).on('touchend', function (event) {
-            if (dragging == false) {
-                // If we're not dragging and have clicked on something other than
-                // a flyover link then clear the flyovers
-                if (!$(event.target).closest('.flyover-link-wrap').length) {
-                    jQuery(".flyover-link").each(function () {
-                        var flyover = jQuery(this).attr("rel").toLowerCase();
-                        var iteration = jQuery(this).data("iteration");
-                        if (iteration == 2) {
-                            jQuery(flyover).hide();
-                            jQuery(this).data("iteration", 1);
-                        }
-                    });
+            jQuery(document).on('touchend', function (event) {
+                if (dragging == false) {
+                    // If we're not dragging and have clicked on something other than
+                    // a flyover link then clear the flyovers
+                    if (!$(event.target).closest('.flyover-link-wrap').length) {
+                        jQuery(".flyover-link").each(function () {
+                            var flyover = jQuery(this).attr("rel").toLowerCase();
+                            var iteration = jQuery(this).data("iteration");
+                            if (iteration == 2) {
+                                jQuery(flyover).hide();
+                                jQuery(this).data("iteration", 1);
+                            }
+                        });
+                    }
+                } else {
+                    // If we're dragging then leave the flyovers open but
+                    // set the dragging variable to false to set it up for
+                    // the next check.
+                    dragging = false;
                 }
-            } else {
-                // If we're dragging then leave the flyovers open but
-                // set the dragging variable to false to set it up for
-                // the next check.
-                dragging = false;
-            }
-        });
+            });
+        }
+
     }
 
-    jQuery(".contactEMAddr").on("click", function (e) {
-        e.preventDefault();
-        var uname = $(this).data('uname'),
-            domain = $(this).data('domain');
+    globalFunctions.flyoverSetup = flyoverSetup;
 
-        window.location.href = "mailto:" + uname.substring(0) + "@" + domain.substring(0);
-    });
+    
+    
 
     // Add text to empty anchor tags to fix 508 compliance errors
     setTimeout(function () {
@@ -802,9 +803,15 @@ jQuery(window).load(function () {
         $includedText.html($includedText.html().replace('These amounts are current as of 2016.', 'These amounts are current for the 2017 tax year.'));
     }
 
+jQuery(".contactEMAddr").on("click", function (e) {
+        e.preventDefault();
+        var uname = $(this).data('uname'),
+            domain = $(this).data('domain');
 
+        window.location.href = "mailto:" + uname.substring(0) + "@" + domain.substring(0);
+    });
 
-
+globalFunctions.flyoverSetup();
 });
 
 $(document).ready(function () {
