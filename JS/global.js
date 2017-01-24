@@ -6,6 +6,9 @@
  *  Made by SoapBox Innovations, Inc.
  *  Under MIT License
  */
+
+var globalFunctions = {};
+
 !function(a,b,c){"use strict";function d(a,b){this._defaults=e,this.element=a,this.setOptions(b),this.init()}var e={tagName:"a",newLine:"\n",target:"_blank",linkClass:null,linkClasses:[],linkAttributes:null};d.prototype={constructor:d,init:function(){1===this.element.nodeType?d.linkifyNode.call(this,this.element):this.element=d.linkify.call(this,this.element.toString())},setOptions:function(a){this.settings=d.extendSettings(a,this.settings)},toString:function(){return this.element.toString()}},d.extendSettings=function(a,b){var c;b=b||{};for(c in e)b[c]||(b[c]=e[c]);for(c in a)b[c]=a[c];return b},d.linkMatch=new RegExp(["(",'\\s|[^a-zA-Z0-9.\\+_\\/"\\>\\-]|^',")(?:","(","[a-zA-Z0-9\\+_\\-]+","(?:","\\.[a-zA-Z0-9\\+_\\-]+",")*@",")?(","http:\\/\\/|https:\\/\\/|ftp:\\/\\/",")?(","(?:(?:[a-zA-Z0-9][a-zA-Z0-9_%\\-_+]*\\.)+)",")(","(?:com|ca|co|edu|gov|net|org|dev|biz|cat|int|pro|tel|mil|aero|asia|coop|info|jobs|mobi|museum|name|post|travel|local|[a-zA-Z]{2})",")(","(?::\\d{1,5})",")?(","(?:","[\\/|\\?]","(?:","[\\-a-zA-Z0-9_%#*&+=~!?,;:.\\/]*",")*",")","[\\-\\/a-zA-Z0-9_%#*&+=~]","|","\\/?",")?",")(",'[^a-zA-Z0-9\\+_\\/"\\<\\-]|$',")"].join(""),"g"),d.emailLinkMatch=/(<[a-zA-Z]+ href=\")(http:\/\/)([a-zA-Z0-9\+_\-]+(?:\.[a-zA-Z0-9\+_\-]+)*@)/g,d.linkify=function(a,b){var c,e,f,g=[];this.constructor===d&&this.settings?(e=this.settings,b&&(e=d.extendSettings(b,e))):e=d.extendSettings(b),f=e.linkClass?e.linkClass.split(/\s+/):[],f.push.apply(f,e.linkClasses),a=a.replace(/</g,"&lt;").replace(/(\s)/g,"$1$1"),g.push("$1<"+e.tagName,'href="http://$2$4$5$6$7"'),g.push('class="linkified'+(f.length>0?" "+f.join(" "):"")+'"'),e.target&&g.push('target="'+e.target+'"');for(c in e.linkAttributes)g.push([c,'="',e.linkAttributes[c].replace(/\"/g,"&quot;").replace(/\$/g,"&#36;"),'"'].join(""));return g.push(">$2$3$4$5$6$7</"+e.tagName+">$8"),a=a.replace(d.linkMatch,g.join(" ")),a=a.replace(d.emailLinkMatch,"$1mailto:$3"),a=a.replace(/(\s){2}/g,"$1"),a=a.replace(/\n/g,e.newLine)},d.linkifyNode=function(a){var b,e,f,g,h;if(a&&"object"==typeof a&&1===a.nodeType&&"a"!==a.tagName.toLowerCase()&&!/[^\s]linkified[\s$]/.test(a.className)){for(b=[],g=d._dummyElement||c.createElement("div"),e=a.firstChild,f=a.childElementCount;e;){if(3===e.nodeType){for(;g.firstChild;)g.removeChild(g.firstChild);for(g.innerHTML=d.linkify.call(this,e.textContent||e.innerText||e.nodeValue),b.push.apply(b,g.childNodes);g.firstChild;)g.removeChild(g.firstChild)}else 1===e.nodeType?b.push(d.linkifyNode(e)):b.push(e);e=e.nextSibling}for(;a.firstChild;)a.removeChild(a.firstChild);for(h=0;h<b.length;h++)a.appendChild(b[h])}return a},d._dummyElement=c.createElement("div"),a.fn.linkify=function(b){return this.each(function(){var c;(c=a.data(this,"plugin-linkify"))?(c.setOptions(b),c.init()):a.data(this,"plugin-linkify",new d(this,b))})},a.fn.linkify.Constructor=d,a(b).on("load",function(){a("[data-linkify]").each(function(){var b,c=a(this),d=c.attr("data-linkify"),e={tagName:c.attr("data-linkify-tagname"),newLine:c.attr("data-linkify-newline"),target:c.attr("data-linkify-target"),linkClass:c.attr("data-linkify-linkclass")};for(var f in e)"undefined"==typeof e[f]&&delete e[f];b="this"===d?c:c.find(d),b.linkify(e)})}),a("body").on("click",".linkified",function(){var c=a(this),d=c.attr("href"),e=/^mailto:/i.test(d),f=c.attr("target");return e?b.location.href=d:b.open(d,f),!1})}(jQuery,window,document);
 
 jQuery.support.css3transition = (function () {
@@ -130,85 +133,6 @@ var isiOS = deviceAgent.match(/(iphone|ipod|ipad)/);
 
 jQuery(document).ready(function () {
 
-	//brochure validation
-	/*jQuery("#brochureform").submit(function(e){
-		var fName = jQuery.trim(document.forms["brochureform"]["first"].value);
-		var lName = jQuery.trim(document.forms["brochureform"]["last"].value);
-		var email = jQuery.trim(document.forms["brochureform"]["email"].value);
-		var honeypot = jQuery.trim(document.forms["brochureform"]["honeypot"].value);
-
-		if("" != honeypot){
-			//spam bot filled in hidden field, bypass form submission
-			jQuery.magnificPopup.close();
-			return false;
-		}else if(fName != "" && lName != "" && email != ""){
-			if(!isEmail(email)){
-				alert("Please enter a valid email address");
-				return false;
-			}else{
-				jQuery.magnificPopup.close();
-				return true;
-			}
-		} else {
-			alert("Please fill your first name, last name and email address");
-			return false;
-		}
-	});*/
-
-	//DCGA brochure validation
-	/*jQuery("#DCGAbrochureform").submit(function(e){
-		var fName = jQuery.trim(document.forms["DCGAbrochureform"]["first"].value);
-		var lName = jQuery.trim(document.forms["DCGAbrochureform"]["last"].value);
-		var email = jQuery.trim(document.forms["DCGAbrochureform"]["email"].value);
-		var checkpoint = function(){
-			if(document.forms["DCGAbrochureform"]["honeypot"]) return jQuery.trim(document.forms["DCGAbrochureform"]["honeypot"].value);
-			if(document.forms["DCGAbrochureform"]["dcgaCheckpoint"]) return jQuery.trim(document.forms["DCGAbrochureform"]["dcgaCheckpoint"].value);
-		}
-
-		if("" != checkpoint()){
-			//spam bot filled in hidden field, bypass form submission
-			jQuery.magnificPopup.close();
-			return false;
-		}else if(fName != "" && lName != "" && email != ""){
-			if(!isEmail(email)){
-				alert("Please enter a valid email address");
-				return false;
-			}else{
-				jQuery.magnificPopup.close();
-				return true;
-			}
-		} else {
-			alert("Please fill your first name, last name and email address");
-			return false;
-		}
-	});*/
-
-	//PEPK form validation
-	/*jQuery("#PEPCForm").submit(function(e){
-		var fName = jQuery.trim(document.forms["PEPCForm"]["first"].value);
-		var lName = jQuery.trim(document.forms["PEPCForm"]["last"].value);
-		var email = jQuery.trim(document.forms["PEPCForm"]["email"].value);
-		var honeypot = jQuery.trim(document.forms["PEPCForm"]["honeypot"].value);
-
-		if("" != honeypot){
-			//spam bot filled in hidden field, bypass form submission
-			jQuery.magnificPopup.close();
-			return false;
-
-		}else if(fName != "" && lName != "" && email != ""){
-			if(!isEmail(email)){
-				alert("Please enter a valid email address");
-				return false;
-			}else{
-				jQuery.magnificPopup.close();
-				return true;
-			}
-		} else {
-			alert("Please fill your first name, last name and email address");
-			return false;
-		}
-	});*/
-
 	//set the orgId to GI URLs without orgId
 	var giDomain = "web.giftillustrator.com";
 	jQuery.each(jQuery(".lightbox, .home-lightbox, .secondary-lightbox"), function(){
@@ -231,17 +155,6 @@ jQuery(document).ready(function () {
 		midClick: true // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
 	});
 
-	/*if(!jQuery.support.css3transition){
-		jQuery(".journey-paths .advGroup img").on("mouseenter",function(){
-			jQuery(this).hide();
-			jQuery(this).next().show();
-		});
-
-		jQuery(".journey-paths .advGroup .txtPopup").on("mouseleave",function(){
-			jQuery(this).hide();
-			jQuery(this).prev().show();
-		});
-	}*/
 	jQuery(".stl-journey-paths a.stl-popup").attr("oncontextmenu", "return false;");
 
 	var alphabet = ("abcdefghijklmnopqrstuvwxyz").split("");
@@ -289,7 +202,7 @@ jQuery(document).ready(function () {
 		});
 	}
 
-
+var flyoverSetup = function() {
 
 	var topDiff = 13;
 	if(!isTouchDevice()){
@@ -387,14 +300,9 @@ jQuery(document).ready(function () {
 			}
 		});
 	}
+}
 
-	jQuery(".contactEMAddr").on("click",function (e) {
-	    e.preventDefault();
-	    var uname = $(this).data('uname'),
-            domain = $(this).data('domain');
-
-		window.location.href = "mailto:" + uname.substring(0) + "@" + domain.substring(0);
-	});
+globalFunctions.flyoverSetup = flyoverSetup;
 
 	jQuery(".custom-captcha-form").attr('action', '');
 	jQuery(".custom-captcha-form").submit(function (e) {
@@ -567,7 +475,90 @@ jQuery(document).ready(function(){
 });
 jQuery(window).load(function() {
 
-    //Order of values in each 'local' section is hugely important. Changing the order will
+
+
+    // Fix an HTML issue found on the retirement-plan-check-up-tips syndicated article
+    if (jQuery('body.retirement-plan-check-up-tips .syndicated ol li:last-child').length || jQuery('body#retirement-plan-check-up-tips-page .syndicated ol li:last-child').length) {
+        var $lastTip = jQuery('.syndicated ol li:last-child');
+        $lastTip.html($lastTip.html().replace('A<strong>ssess Your Debt', '<strong>Assess Your Debt'));
+    }
+    // Fix an HTML issue found on the include-in-your-emergency-plan syndicated article
+    if (jQuery('body.include-in-your-emergency-plan').length || jQuery('body#include-in-your-emergency-plan-page').length) {
+        var $includedText = jQuery('.syndicated');
+        $includedText.html($includedText.html().replace('by included a gift', 'by including a gift'));
+    }
+    // Fix an HTML issue found on the make-sure-your-will-keeps-pace-with-your-life syndicated article
+    if (jQuery('body.make-sure-your-will-keeps-pace-with-your-life').length || jQuery('body#make-sure-your-will-keeps-pace-with-your-life-page').length) {
+        var $includedText = jQuery('.syndicated');
+        $includedText.html($includedText.html().replace('please contact an estate planning attorney at', 'please contact us at'));
+    }
+		// Fix an HTML issue found on the /ensure-you-live-forever
+		if (jQuery('body.ensure-you-live-forever').length || jQuery('body#ensure-you-live-forever-page').length) {
+				var $includedText = jQuery('.syndicated');
+				$includedText.html($includedText.html().replace('Discuss how making gift to a charity', 'Discuss how making a gift to a charity'));
+		}
+    // Fix an HTML issue found on estate-plan-update article
+    if (jQuery('body.estate-plan-update').length || jQuery('body#estate-plan-update-page').length) {
+        if (jQuery('div.main-copy ul:nth-of-type(2) li:nth-child(5)').html() == 'Can provide for a backup trustee if you’re filling that role and you become incapacitated. Is an affordable way to support the people and causes you love most.') {
+            jQuery('div.main-copy ul:nth-of-type(2) li:nth-child(5)').replaceWith(
+                '<li>Can provide for a backup trustee if you&#39;re filling that role and you become incapacitated.</li><li>Is an affordable way to support the people and causes you love most.</li>');
+        }
+    }
+    // Change an href on social-security-rules article
+    if (jQuery('body.social-security-rules').length || jQuery('body#social-security-rules-page').length) {
+        jQuery('a:contains("Social Security website")').attr('href', 'https://www.ssa.gov/planners/retire/claiming.html');
+    }
+
+    // Change the title of Summer Emergency Planning article
+    if (jQuery('body.summer-emergency-planning').length || jQuery('body#summer-emergency-planning-page').length) {
+        jQuery('h1:contains("Summer Emergency Planning")').html('4 Tips for Emergency Planning');
+    }
+
+    // Remove Orphan from Q4 Whats New article
+    if (jQuery('body.easy-ways-to-help-before-dec-31').length || jQuery('body#easy-ways-to-help-before-dec-31-page').length) {
+        jQuery('h1').each(function() {
+            var string = jQuery(this).html();
+            string = string.replace(/ ([^ ]*)$/, '&nbsp;$1');
+            jQuery(this).html(string);
+        });
+    }
+
+    // Remove Orphan from Whats New
+    if (jQuery('#stl-whats-new').length) {
+        jQuery('a:contains("Dec. 31")').each(function() {
+            var string = jQuery(this).html();
+            string = string.replace(/ ([^ ]*)$/, '&nbsp;$1');
+            jQuery(this).html(string);
+        });
+    }
+
+    // Correction on Syndicated article /your-financial-future
+    var duplicate = {};
+    jQuery('body.your-financial-future .syndicated, body#your-financial-future-page .syndicated').parent().find('p').each(function() {  
+        var txt = jQuery(this).html();  
+        if (duplicate[txt])     jQuery(this).remove();  
+        else     duplicate[txt] = true;
+    });
+
+    // Correction on Syndicated article /worry-out-of-retirement
+    if (jQuery('body.worry-out-of-retirement').length || jQuery('body#worry-out-of-retirement-page').length) {
+        var $includedText = jQuery('.syndicated');
+        $includedText.html($includedText.html().replace('Worrying about having enough money to meet your needs and do the things you want to shouldn’t be a part of retirement planning.', 'Ensuring you have enough money to meet your needs and do the things you want to is all part of retirement planning.'));
+    }
+
+		// Correction on Syndicated article /life-after-40
+		if (jQuery('body.life-after-40').length || jQuery('body#life-after-40-page').length) {
+				var $includedText = jQuery('.syndicated');
+				$includedText.html($includedText.html().replace('Retirement plan assets are exposed to federal income taxes that could be as much as 39.6 percent after your lifetime.', 'If you leave these assets to your loved ones, the distributions are subject to income taxes based on your heirs&rsquo; ordinary income tax rate.'));
+		}
+
+		// Correction on Syndicated article /moves-to-make-after-50
+		if (jQuery('body.moves-to-make-after-50').length || jQuery('body#moves-to-make-after-50-page').length) {
+				var $includedText = jQuery('.syndicated');
+				$includedText.html($includedText.html().replace('These amounts are current as of 2016.', 'These amounts are current for the 2017 tax year.'));
+		}
+
+            //Order of values in each 'local' section is hugely important. Changing the order will
     // change the context of the case study text. You have been warned. :)
 
     var caseStudyComponent = {
@@ -620,7 +611,13 @@ jQuery(window).load(function() {
             },
             local: {
                 '$81,305': '$97,613',
-                '$22,765': '$27,332'
+                '$22,765': '$27,332',
+                '75' : '60',
+                '$500,000' : '$250,000',
+                '$30,000' : '$15,000',
+                '$275,725' : '$81,305',
+                '$90,989' : '$22,765',
+                '33' : '28'
             }
         }
 
@@ -707,85 +704,15 @@ jQuery(window).load(function() {
         _setCaseStudyText(caseStudyText);
     }
 
-    // Fix an HTML issue found on the retirement-plan-check-up-tips syndicated article
-    if (jQuery('body.retirement-plan-check-up-tips .syndicated ol li:last-child').length || jQuery('body#retirement-plan-check-up-tips-page .syndicated ol li:last-child').length) {
-        var $lastTip = jQuery('.syndicated ol li:last-child');
-        $lastTip.html($lastTip.html().replace('A<strong>ssess Your Debt', '<strong>Assess Your Debt'));
-    }
-    // Fix an HTML issue found on the include-in-your-emergency-plan syndicated article
-    if (jQuery('body.include-in-your-emergency-plan').length || jQuery('body#include-in-your-emergency-plan-page').length) {
-        var $includedText = jQuery('.syndicated');
-        $includedText.html($includedText.html().replace('by included a gift', 'by including a gift'));
-    }
-    // Fix an HTML issue found on the make-sure-your-will-keeps-pace-with-your-life syndicated article
-    if (jQuery('body.make-sure-your-will-keeps-pace-with-your-life').length || jQuery('body#make-sure-your-will-keeps-pace-with-your-life-page').length) {
-        var $includedText = jQuery('.syndicated');
-        $includedText.html($includedText.html().replace('please contact an estate planning attorney at', 'please contact us at'));
-    }
-		// Fix an HTML issue found on the /ensure-you-live-forever
-		if (jQuery('body.ensure-you-live-forever').length || jQuery('body#ensure-you-live-forever-page').length) {
-				var $includedText = jQuery('.syndicated');
-				$includedText.html($includedText.html().replace('Discuss how making gift to a charity', 'Discuss how making a gift to a charity'));
-		}
-    // Fix an HTML issue found on estate-plan-update article
-    if (jQuery('body.estate-plan-update').length || jQuery('body#estate-plan-update-page').length) {
-        if (jQuery('div.main-copy ul:nth-of-type(2) li:nth-child(5)').html() == 'Can provide for a backup trustee if you’re filling that role and you become incapacitated. Is an affordable way to support the people and causes you love most.') {
-            jQuery('div.main-copy ul:nth-of-type(2) li:nth-child(5)').replaceWith(
-                '<li>Can provide for a backup trustee if you&#39;re filling that role and you become incapacitated.</li><li>Is an affordable way to support the people and causes you love most.</li>');
-        }
-    }
-    // Change an href on social-security-rules article
-    if (jQuery('body.social-security-rules').length || jQuery('body#social-security-rules-page').length) {
-        jQuery('a:contains("Social Security website")').attr('href', 'https://www.ssa.gov/planners/retire/claiming.html');
-    }
 
-    // Change the title of Summer Emergency Planning article
-    if (jQuery('body.summer-emergency-planning').length || jQuery('body#summer-emergency-planning-page').length) {
-        jQuery('h1:contains("Summer Emergency Planning")').html('4 Tips for Emergency Planning');
-    }
+    	jQuery(".contactEMAddr").on("click",function (e) {
+	    e.preventDefault();
+	    var uname = $(this).data('uname'),
+            domain = $(this).data('domain');
 
-    // Remove Orphan from Q4 Whats New article
-    if (jQuery('body.easy-ways-to-help-before-dec-31').length || jQuery('body#easy-ways-to-help-before-dec-31-page').length) {
-        jQuery('h1').each(function() {
-            var string = jQuery(this).html();
-            string = string.replace(/ ([^ ]*)$/, '&nbsp;$1');
-            jQuery(this).html(string);
-        });
-    }
+		window.location.href = "mailto:" + uname.substring(0) + "@" + domain.substring(0);
+	});
 
-    // Remove Orphan from Whats New
-    if (jQuery('#stl-whats-new').length) {
-        jQuery('a:contains("Dec. 31")').each(function() {
-            var string = jQuery(this).html();
-            string = string.replace(/ ([^ ]*)$/, '&nbsp;$1');
-            jQuery(this).html(string);
-        });
-    }
-
-    // Correction on Syndicated article /your-financial-future
-    var duplicate = {};
-    jQuery('body.your-financial-future .syndicated, body#your-financial-future-page .syndicated').parent().find('p').each(function() {  
-        var txt = jQuery(this).html();  
-        if (duplicate[txt])     jQuery(this).remove();  
-        else     duplicate[txt] = true;
-    });
-
-    // Correction on Syndicated article /worry-out-of-retirement
-    if (jQuery('body.worry-out-of-retirement').length || jQuery('body#worry-out-of-retirement-page').length) {
-        var $includedText = jQuery('.syndicated');
-        $includedText.html($includedText.html().replace('Worrying about having enough money to meet your needs and do the things you want to shouldn’t be a part of retirement planning.', 'Ensuring you have enough money to meet your needs and do the things you want to is all part of retirement planning.'));
-    }
-
-		// Correction on Syndicated article /life-after-40
-		if (jQuery('body.life-after-40').length || jQuery('body#life-after-40-page').length) {
-				var $includedText = jQuery('.syndicated');
-				$includedText.html($includedText.html().replace('Retirement plan assets are exposed to federal income taxes that could be as much as 39.6 percent after your lifetime.', 'If you leave these assets to your loved ones, the distributions are subject to income taxes based on your heirs&rsquo; ordinary income tax rate.'));
-		}
-
-		// Correction on Syndicated article /moves-to-make-after-50
-		if (jQuery('body.moves-to-make-after-50').length || jQuery('body#moves-to-make-after-50-page').length) {
-				var $includedText = jQuery('.syndicated');
-				$includedText.html($includedText.html().replace('These amounts are current as of 2016.', 'These amounts are current for the 2017 tax year.'));
-		}
+    globalFunctions.flyoverSetup();
 
 });
