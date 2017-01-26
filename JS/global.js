@@ -705,12 +705,12 @@ jQuery(window).load(function() {
     }
 
 
-    	jQuery(".contactEMAddr").on("click",function (e) {
+    jQuery(".contactEMAddr").on("click",function (e) {
 	    e.preventDefault();
-	    var uname = $(this).data('uname'),
-            domain = $(this).data('domain');
-
-		window.location.href = "mailto:" + uname.substring(0) + "@" + domain.substring(0);
+	    var uname = $(this).data('uname').trim();
+        var domain = $(this).data('domain').trim();
+        var email = "mailto:" + uname + "@" + domain;
+		window.location.href = email;
 	});
 
     globalFunctions.flyoverSetup();
