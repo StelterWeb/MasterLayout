@@ -803,13 +803,13 @@ jQuery(window).load(function () {
         $includedText.html($includedText.html().replace('These amounts are current as of 2016.', 'These amounts are current for the 2017 tax year.'));
     }
 
-jQuery(".contactEMAddr").on("click", function (e) {
-        e.preventDefault();
-        var uname = $(this).data('uname'),
-            domain = $(this).data('domain');
-
-        window.location.href = "mailto:" + uname.substring(0) + "@" + domain.substring(0);
-    });
+    jQuery(".contactEMAddr").on("click",function (e) {
+	    e.preventDefault();
+	    var uname = $(this).data('uname').trim();
+        var domain = $(this).data('domain').trim();
+        var email = "mailto:" + uname + "@" + domain;
+		window.location.href = email;
+	});
 
 globalFunctions.flyoverSetup();
 });
