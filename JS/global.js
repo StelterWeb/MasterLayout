@@ -8,6 +8,18 @@
  */
 
 var globalFunctions = {};
+globalFunctions.jQuery =  (function(){if (this.constructor.name == "Window"){ return this.jQuery;} else {return jQuery;}})(Window);
+globalFunctions.jQueryMagnificPopupCheck = (function (){
+    if (jQuery.magnificPopup){
+        return jQuery;
+    }
+    else if($gi_jq.magnificPopup){
+        return $gi_jq;
+    }
+    else{
+        return globalFunctions.jQuery;
+    }
+})();
 
 !function(a,b,c){"use strict";function d(a,b){this._defaults=e,this.element=a,this.setOptions(b),this.init()}var e={tagName:"a",newLine:"\n",target:"_blank",linkClass:null,linkClasses:[],linkAttributes:null};d.prototype={constructor:d,init:function(){1===this.element.nodeType?d.linkifyNode.call(this,this.element):this.element=d.linkify.call(this,this.element.toString())},setOptions:function(a){this.settings=d.extendSettings(a,this.settings)},toString:function(){return this.element.toString()}},d.extendSettings=function(a,b){var c;b=b||{};for(c in e)b[c]||(b[c]=e[c]);for(c in a)b[c]=a[c];return b},d.linkMatch=new RegExp(["(",'\\s|[^a-zA-Z0-9.\\+_\\/"\\>\\-]|^',")(?:","(","[a-zA-Z0-9\\+_\\-]+","(?:","\\.[a-zA-Z0-9\\+_\\-]+",")*@",")?(","http:\\/\\/|https:\\/\\/|ftp:\\/\\/",")?(","(?:(?:[a-zA-Z0-9][a-zA-Z0-9_%\\-_+]*\\.)+)",")(","(?:com|ca|co|edu|gov|net|org|dev|biz|cat|int|pro|tel|mil|aero|asia|coop|info|jobs|mobi|museum|name|post|travel|local|[a-zA-Z]{2})",")(","(?::\\d{1,5})",")?(","(?:","[\\/|\\?]","(?:","[\\-a-zA-Z0-9_%#*&+=~!?,;:.\\/]*",")*",")","[\\-\\/a-zA-Z0-9_%#*&+=~]","|","\\/?",")?",")(",'[^a-zA-Z0-9\\+_\\/"\\<\\-]|$',")"].join(""),"g"),d.emailLinkMatch=/(<[a-zA-Z]+ href=\")(http:\/\/)([a-zA-Z0-9\+_\-]+(?:\.[a-zA-Z0-9\+_\-]+)*@)/g,d.linkify=function(a,b){var c,e,f,g=[];this.constructor===d&&this.settings?(e=this.settings,b&&(e=d.extendSettings(b,e))):e=d.extendSettings(b),f=e.linkClass?e.linkClass.split(/\s+/):[],f.push.apply(f,e.linkClasses),a=a.replace(/</g,"&lt;").replace(/(\s)/g,"$1$1"),g.push("$1<"+e.tagName,'href="http://$2$4$5$6$7"'),g.push('class="linkified'+(f.length>0?" "+f.join(" "):"")+'"'),e.target&&g.push('target="'+e.target+'"');for(c in e.linkAttributes)g.push([c,'="',e.linkAttributes[c].replace(/\"/g,"&quot;").replace(/\$/g,"&#36;"),'"'].join(""));return g.push(">$2$3$4$5$6$7</"+e.tagName+">$8"),a=a.replace(d.linkMatch,g.join(" ")),a=a.replace(d.emailLinkMatch,"$1mailto:$3"),a=a.replace(/(\s){2}/g,"$1"),a=a.replace(/\n/g,e.newLine)},d.linkifyNode=function(a){var b,e,f,g,h;if(a&&"object"==typeof a&&1===a.nodeType&&"a"!==a.tagName.toLowerCase()&&!/[^\s]linkified[\s$]/.test(a.className)){for(b=[],g=d._dummyElement||c.createElement("div"),e=a.firstChild,f=a.childElementCount;e;){if(3===e.nodeType){for(;g.firstChild;)g.removeChild(g.firstChild);for(g.innerHTML=d.linkify.call(this,e.textContent||e.innerText||e.nodeValue),b.push.apply(b,g.childNodes);g.firstChild;)g.removeChild(g.firstChild)}else 1===e.nodeType?b.push(d.linkifyNode(e)):b.push(e);e=e.nextSibling}for(;a.firstChild;)a.removeChild(a.firstChild);for(h=0;h<b.length;h++)a.appendChild(b[h])}return a},d._dummyElement=c.createElement("div"),a.fn.linkify=function(b){return this.each(function(){var c;(c=a.data(this,"plugin-linkify"))?(c.setOptions(b),c.init()):a.data(this,"plugin-linkify",new d(this,b))})},a.fn.linkify.Constructor=d,a(b).on("load",function(){a("[data-linkify]").each(function(){var b,c=a(this),d=c.attr("data-linkify"),e={tagName:c.attr("data-linkify-tagname"),newLine:c.attr("data-linkify-newline"),target:c.attr("data-linkify-target"),linkClass:c.attr("data-linkify-linkclass")};for(var f in e)"undefined"==typeof e[f]&&delete e[f];b="this"===d?c:c.find(d),b.linkify(e)})}),a("body").on("click",".linkified",function(){var c=a(this),d=c.attr("href"),e=/^mailto:/i.test(d),f=c.attr("target");return e?b.location.href=d:b.open(d,f),!1})}(jQuery,window,document);
 
@@ -54,23 +66,27 @@ function validateBrochureForm() {
         if (document.forms["brochureform"]["honeypot"]) return jQuery.trim(document.forms["brochureform"]["honeypot"].value);
         if (document.forms["brochureform"]["ebroCheckpoint"]) return jQuery.trim(document.forms["brochureform"]["ebroCheckpoint"].value);
     }
+    var closeCheck = globalFunctions.jQueryMagnificPopupCheck;
 
     if ("" != checkpoint()) {
         //spam bot filled in hidden field, bypass form submission
-        jQuery.magnificPopup.close();
+        
+        closeCheck.magnificPopup.close();
         return false;
     } else if (fName != "" && lName != "" && email != "") {
         if (!isEmail(email)) {
             alert("Please enter a valid email address");
             return false;
         } else {
-            jQuery.magnificPopup.close();
+            closeCheck.magnificPopup.close();
             return true;
         }
     } else {
         alert("Please fill your first name, last name and email address");
         return false;
     }
+
+
 }
 function validatePEPCForm(){
 	var fName = jQuery.trim(document.forms["PEPCForm"]["first"].value);
@@ -80,10 +96,10 @@ function validatePEPCForm(){
 		if(document.forms["PEPCForm"]["honeypot"]) return jQuery.trim(document.forms["PEPCForm"]["honeypot"].value);
 		if(document.forms["PEPCForm"]["pepcCheckpoint"]) return jQuery.trim(document.forms["PEPCForm"]["pepcCheckpoint"].value);
 	}
-
+    var closeCheck = globalFunctions.jQueryMagnificPopupCheck;
 	if("" != checkpoint()){
 		//spam bot filled in hidden field, bypass form submission
-		jQuery.magnificPopup.close();
+		closeCheck.magnificPopup.close();
 		return false;
 
 	}else if(fName != "" && lName != "" && email != ""){
@@ -91,7 +107,7 @@ function validatePEPCForm(){
 			alert("Please enter a valid email address");
 			return false;
 		}else{
-			jQuery.magnificPopup.close();
+			closeCheck.magnificPopup.close();
 			return true;
 		}
 	} else {
@@ -109,16 +125,17 @@ function validateDcgaForm() {
 		if(document.forms["DCGAbrochureform"]["dcgaCheckpoint"]) return jQuery.trim(document.forms["DCGAbrochureform"]["dcgaCheckpoint"].value);
 	}
 
+    var closeCheck = globalFunctions.jQueryMagnificPopupCheck;
 	if("" != checkpoint()){
 		//spam bot filled in hidden field, bypass form submission
-		jQuery.magnificPopup.close();
+		closeCheck.magnificPopup.close();
 		return false;
 	}else if(fName != "" && lName != "" && email != ""){
 		if(!isEmail(email)){
 			alert("Please enter a valid email address");
 			return false;
 		}else{
-			jQuery.magnificPopup.close();
+			closeCheck.magnificPopup.close();
 			return true;
 		}
 	} else {
